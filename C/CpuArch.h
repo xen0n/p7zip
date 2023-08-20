@@ -84,6 +84,14 @@ MY_CPU_64BIT means that processor can work with 64-bit registers.
   #define MY_CPU_64BIT
 #endif
 
+#if defined(__loongarch__)
+  #define MY_CPU_LOONGARCH
+  #if defined(__loongarch_lp64)
+    #define MY_CPU_LOONGARCH64
+    #define MY_CPU_NAME "loongarch64"
+    #define MY_CPU_64BIT
+  #endif
+#endif
 
 #if  defined(__mips64) \
   || defined(__mips64__) \
