@@ -95,6 +95,29 @@ UInt32 MY_FAST_CALL CrcUpdateT1(UInt32 v, const void *data, size_t size, const U
       #endif
   #endif
 
+#elif defined(MY_CPU_LOONGARCH64)
+
+  #define USE_LOONGARCH64_CRC
+  #include <larchintrin.h>
+
+MY_FORCE_INLINE
+UInt32 __crc32b(UInt32 v, UInt32 data)
+{
+  return __crc_w_b_w((Byte)data, v);
+}
+
+MY_FORCE_INLINE
+UInt32 __crc32w(UInt32 v, UInt32 data)
+{
+  return __crc_w_w_w(data, v);
+}
+
+MY_FORCE_INLINE
+UInt32 __crc32d(UInt32 v, UInt64 data)
+{
+  return __crc_w_d_w(data, v);
+}
+
 #else
 
 // no hardware CRC
@@ -141,11 +164,11 @@ UInt32 __crc32d(UInt32 v, UInt64 data)
 
 #endif // USE_CRC_EMU
 
-#endif // defined(MY_CPU_ARM64) && defined(MY_CPU_LE)
+#endif // defined(MY_CPU_ARM64) && defined(MY_CPU_LOONGARCH64) && defined(MY_CPU_LE)
 
 
 
-#if defined(USE_ARM64_CRC) || defined(USE_CRC_EMU)
+#if defined(USE_ARM64_CRC) || defined(USE_LOONGARCH64_CRC) || defined(USE_CRC_EMU)
 
 #define T0_32_UNROLL_BYTES (4 * 4)
 #define T0_64_UNROLL_BYTES (4 * 8)
